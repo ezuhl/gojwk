@@ -35,7 +35,14 @@ func safeDecode(str string) ([]byte, error) {
 		str = str + strings.Repeat("=", 4-lenMod4)
 	}
 
-	return base64.URLEncoding.DecodeString(str)
+	returnBytes := make([]byte,0)
+	returnBytes,err := base64.URLEncoding.DecodeString(str); if err != nil {
+		returnBytes,err = base64.StdEncoding.DecodeString(str); if err != nil {
+			return returnBytes, err
+		}
+	}
+
+	return returnBytes, nil
 }
 
 func safeEncode(p []byte) string {
